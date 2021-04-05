@@ -1,8 +1,6 @@
 package it.polimi.ingsw.example.server;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -25,32 +23,14 @@ public class Server
 
     while (true) {
       try {
-        handleClientConnection(socket.accept());
+        /* accepts connections; for every connection we accept,
+         * create a new Thread executing a ClientHandler */
+        Socket client = socket.accept();
+        ClientHandler clientHandler = new ClientHandler(client);
+        clientHandler.run();
       } catch (IOException e) {
         System.out.println("connection dropped");
       }
     }
-  }
-
-
-  private static void handleClientConnection(Socket client) throws IOException
-  {
-    System.out.println("Connected to " + client.getInetAddress());
-
-    ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
-    ObjectInputStream input = new ObjectInputStream(client.getInputStream());
-
-    try {
-      while (true) {
-        /* read a String from the stream and write an uppercase string in response */
-        Object next = input.readObject();
-        String str = (String)next;
-        output.writeObject(str.toUpperCase());
-      }
-    } catch (ClassNotFoundException | ClassCastException e) {
-      System.out.println("invalid stream from client");
-    }
-
-    client.close();
   }
 }

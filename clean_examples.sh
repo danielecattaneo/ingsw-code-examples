@@ -37,6 +37,16 @@ for pom_file in $(cd "$dir_in"; find . -name "pom.xml"); do
   popd > /dev/null
 done
 
+if [[ -e "$dir_in/README.md" ]]; then
+  pandoc \
+    -V geometry:margin=2.5cm \
+    -V documentclass='scrartcl' \
+    -V fontfamily='times' \
+    -V fontsize='12pt' \
+    --pdf-engine=pdflatex \
+    "$dir_in/README.md" -o "$dir_out/README.pdf"
+fi
+
 if [[ $# -eq 3 ]]; then
   cd ..
   zip -9r "$zip_out" $(basename "$dir_out")

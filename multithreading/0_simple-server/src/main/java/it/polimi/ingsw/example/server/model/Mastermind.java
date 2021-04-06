@@ -1,4 +1,4 @@
-package it.polimi.ingsw.example.core;
+package it.polimi.ingsw.example.server.model;
 
 import java.util.Random;
 

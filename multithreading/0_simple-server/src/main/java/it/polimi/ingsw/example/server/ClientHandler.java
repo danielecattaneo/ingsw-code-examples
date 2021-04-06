@@ -1,6 +1,6 @@
 package it.polimi.ingsw.example.server;
 
-import it.polimi.ingsw.example.core.Mastermind;
+import it.polimi.ingsw.example.server.model.Mastermind;
 import it.polimi.ingsw.example.server.messages.AnswerMsg;
 import it.polimi.ingsw.example.server.messages.CommandMsg;
 

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.example.server.messages;
 
-import it.polimi.ingsw.example.core.InvalidGuessException;
-import it.polimi.ingsw.example.core.Mastermind;
+import it.polimi.ingsw.example.server.model.InvalidGuessException;
+import it.polimi.ingsw.example.server.model.Mastermind;
 import it.polimi.ingsw.example.server.ClientHandler;
 
 import java.io.IOException;

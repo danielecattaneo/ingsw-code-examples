@@ -1,8 +1,14 @@
 package it.polimi.ingsw.example.client.views;
 
+/**
+ * Fallback view used when there are no other views to be
+ * displayed.
+ */
 public class IdleView extends View
 {
+  /** Characters used for the spinner animation */
   private static final String SPINNER = "\\|/-\\|/-";
+  /** Ascii backspace character */
   private static final String BACKSPACE = "\010";
 
 
@@ -24,7 +30,7 @@ public class IdleView extends View
           this.wait(500);
         } catch (InterruptedException e) {}
 
-        /* erase the last wait message */
+        /* Erase the last wait message */
         for (int i=0; i<lastWaitMessage.length(); i++)
           System.out.print(BACKSPACE);
       }

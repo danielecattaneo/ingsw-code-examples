@@ -6,11 +6,20 @@ import it.polimi.ingsw.example.server.messages.NewGameMsg;
 import java.util.Scanner;
 
 
+/**
+ * View that handles displaying the results of the guess when
+ * returned by the server.
+ */
 public class PrintAnswerView extends View
 {
+  /** The answer message containing the data from the server */
   private GuessAnswerMsg answerMsg;
 
 
+  /**
+   * Initialize with an answer from the server.
+   * @param answerMsg The answer message.
+   */
   public PrintAnswerView(GuessAnswerMsg answerMsg)
   {
     this.answerMsg = answerMsg;

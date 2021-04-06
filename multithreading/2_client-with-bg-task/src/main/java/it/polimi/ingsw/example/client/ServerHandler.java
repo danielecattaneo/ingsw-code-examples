@@ -107,7 +107,6 @@ public class ServerHandler implements Runnable
   /**
    * Sends a message to the server.
    * @param commandMsg The message to be sent.
-   * @throws IOException If a communication error occurs.
    */
   public void sendCommandMessage(CommandMsg commandMsg)
   {
@@ -120,6 +119,9 @@ public class ServerHandler implements Runnable
   }
 
 
+  /**
+   * Requires the run() method to stop as soon as possible.
+   */
   public void stop()
   {
     shouldStop.set(true);

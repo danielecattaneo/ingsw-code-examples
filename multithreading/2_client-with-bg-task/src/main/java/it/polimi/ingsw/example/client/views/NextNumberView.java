@@ -5,6 +5,9 @@ import it.polimi.ingsw.example.server.messages.GuessMsg;
 import java.util.Scanner;
 
 
+/**
+ * View that handles asking a user the next guess.
+ */
 public class NextNumberView extends View
 {
   @Override

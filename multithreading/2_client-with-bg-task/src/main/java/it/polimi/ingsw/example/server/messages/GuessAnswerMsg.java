@@ -37,7 +37,7 @@ public class GuessAnswerMsg extends AnswerMsg
 
 
   @Override
-  public void processMessage(ServerHandler serverHandler) throws IOException
+  public void processMessage(ServerHandler serverHandler)
   {
     serverHandler.getClient().transitionToView(new PrintAnswerView(this));
   }

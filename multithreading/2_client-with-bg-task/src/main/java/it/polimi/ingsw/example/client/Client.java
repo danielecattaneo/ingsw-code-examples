@@ -23,7 +23,8 @@ public class Client implements Runnable
 
   public static void main(String[] args)
   {
-    /* Instantiate a new Client */
+    /* Instantiate a new Client. The main thread will become the
+     * thread where user interaction is handled. */
     Client client = new Client();
     client.run();
   }
@@ -47,22 +48,38 @@ public class Client implements Runnable
       return;
     }
     serverHandler = new ServerHandler(server, this);
-    Thread serverHandlerThread = new Thread(serverHandler);
+    Thread serverHandlerThread = new Thread(serverHandler, "server_" + server.getInetAddress().getHostAddress());
     serverHandlerThread.start();
 
+    /* Run the state machine handling the views */
     nextView = new NextNumberView();
     runViewStateMachine();
 
+    /* We are going to stop the application, so ask the server thread
+     * to stop as well. Note that we are invoking the stop() method on
+     * ServerHandler, not on Thread */
     serverHandler.stop();
   }
 
 
+  /**
+   * The handler object responsible for communicating with the server.
+   * @return The server handler.
+   */
   public ServerHandler getServerHandler()
   {
     return serverHandler;
   }
 
 
+  /**
+   * Calls the run() method on the current view until the application
+   * must be stopped.
+   * When no view should be displayed, and the application is not yet
+   * terminating, the IdleView is displayed.
+   * @apiNote The current view can be changed at any moment by using
+   * transitionToView().
+   */
   private void runViewStateMachine()
   {
     boolean stop;
@@ -88,6 +105,10 @@ public class Client implements Runnable
   }
 
 
+  /**
+   * Transitions the view thread to a given view.
+   * @param newView The view to transition to.
+   */
   public synchronized void transitionToView(View newView)
   {
     this.nextView = newView;
@@ -95,9 +116,13 @@ public class Client implements Runnable
   }
 
 
+  /**
+   * Terminates the application as soon as possible.
+   */
   public synchronized void terminate()
   {
     if (!shallTerminate) {
+      /* Signal to the view handler loop that it should exit. */
       shallTerminate = true;
       currentView.stopInteraction();
     }

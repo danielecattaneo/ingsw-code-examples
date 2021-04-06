@@ -1,5 +1,8 @@
 package it.polimi.ingsw.example.client;
 
+import it.polimi.ingsw.example.client.views.IdleView;
+import it.polimi.ingsw.example.client.views.NextNumberView;
+import it.polimi.ingsw.example.client.views.View;
 import it.polimi.ingsw.example.server.Server;
 
 import java.io.IOException;
@@ -7,16 +10,20 @@ import java.net.Socket;
 import java.util.Scanner;
 
 
-public class Client implements Runnable, ServerObserver
+/**
+ * Client for the Mastermind game.
+ */
+public class Client implements Runnable
 {
-  /* auxiliary variable used for implementing the consumer-producer pattern*/
-  private String response = null;
+  private ServerHandler serverHandler;
+  private boolean shallTerminate;
+  private View nextView;
+  private View currentView;
 
 
-  public static void main( String[] args )
+  public static void main(String[] args)
   {
-    /* Instantiate a new Client which will also receive events from
-     * the server by implementing the ServerObserver interface */
+    /* Instantiate a new Client */
     Client client = new Client();
     client.run();
   }
@@ -25,16 +32,13 @@ public class Client implements Runnable, ServerObserver
   @Override
   public void run()
   {
-    /*
-     * WARNING: this method executes IN THE CONTEXT OF THE MAIN THREAD
-     */
-
     Scanner scanner = new Scanner(System.in);
 
     System.out.println("IP address of server?");
     String ip = scanner.nextLine();
 
-    /* open a connection to the server */
+    /* Open connection to the server and start a thread for handling
+     * communication. */
     Socket server;
     try {
       server = new Socket(ip, Server.SOCKET_PORT);
@@ -42,58 +46,60 @@ public class Client implements Runnable, ServerObserver
       System.out.println("server unreachable");
       return;
     }
-    System.out.println("Connected");
+    serverHandler = new ServerHandler(server, this);
+    Thread serverHandlerThread = new Thread(serverHandler);
+    serverHandlerThread.start();
 
-    /* Create the adapter that will allow communication with the server
-     * in background, and start running its thread */
-    ServerAdapter serverAdapter = new ServerAdapter(server);
-    serverAdapter.addObserver(this);
-    Thread serverAdapterThread = new Thread(serverAdapter);
-    serverAdapterThread.start();
+    nextView = new NextNumberView();
+    runViewStateMachine();
 
-    String str = scanner.nextLine();
-    while (!"".equals(str)) {
-
-      synchronized (this) {
-        /* reset the variable that contains the next string to be consumed
-         * from the server */
-        response = null;
-
-        serverAdapter.requestConversion(str);
-
-        /* While we wait for the server to respond, we can do whatever we want.
-         * In this case we print a count-up of the number of seconds since we
-         * requested the conversion to the server. */
-        int seconds = 0;
-        while (response == null) {
-          System.out.println("been waiting for " + seconds + " seconds");
-          try {
-            wait(1000);
-          } catch (InterruptedException e) { }
-          seconds++;
-        }
-
-        /* we have the response, print it */
-        System.out.println(response);
-      }
-
-      str = scanner.nextLine();
-    }
-
-    serverAdapter.stop();
+    serverHandler.stop();
   }
 
 
-  @Override
-  public synchronized void didReceiveConvertedString(String oldStr, String newStr)
+  public ServerHandler getServerHandler()
   {
-    /*
-     * WARNING: this method executes IN THE CONTEXT OF `serverAdapterThread`
-     * because it is called from inside the `run` method of ServerAdapter!
-     */
+    return serverHandler;
+  }
 
-    /* Save the string and notify the main thread */
-    response = newStr;
-    notifyAll();
+
+  private void runViewStateMachine()
+  {
+    boolean stop;
+
+    synchronized (this) {
+      stop = shallTerminate;
+      currentView = nextView;
+      nextView = null;
+    }
+    while (!stop) {
+      if (currentView == null) {
+        currentView = new IdleView();
+      }
+      currentView.setOwner(this);
+      currentView.run();
+
+      synchronized (this) {
+        stop = shallTerminate;
+        currentView = nextView;
+        nextView = null;
+      }
+    }
+  }
+
+
+  public synchronized void transitionToView(View newView)
+  {
+    this.nextView = newView;
+    currentView.stopInteraction();
+  }
+
+
+  public synchronized void terminate()
+  {
+    if (!shallTerminate) {
+      shallTerminate = true;
+      currentView.stopInteraction();
+    }
   }
 }

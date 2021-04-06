@@ -1,14 +1,19 @@
 package it.polimi.ingsw.example.server;
 
-import jdk.net.ExtendedSocketOptions;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 
+/**
+ * Server for the Mastermind game.
+ */
 public class Server
 {
+  /**
+   * The socket port where the server listens to client connections.
+   * @implNote In a real project, this must not be a constant!
+   */
   public final static int SOCKET_PORT = 7777;
 
 
@@ -28,8 +33,6 @@ public class Server
         /* accepts connections; for every connection we accept,
          * create a new Thread executing a ClientHandler */
         Socket client = socket.accept();
-        client.setKeepAlive(true);
-        client.setOption(ExtendedSocketOptions.TCP_KEEPIDLE, 0);
         ClientHandler clientHandler = new ClientHandler(client);
         Thread thread = new Thread(clientHandler, "server_" + client.getInetAddress());
         thread.start();

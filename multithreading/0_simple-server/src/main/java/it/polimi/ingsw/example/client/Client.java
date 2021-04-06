@@ -13,6 +13,9 @@ import java.util.Locale;
 import java.util.Scanner;
 
 
+/**
+ * Client for the Mastermind game.
+ */
 public class Client
 {
   public static void main(String[] args)
@@ -22,7 +25,7 @@ public class Client
     System.out.println("IP address of server?");
     String ip = scanner.nextLine();
 
-    /* open a connection to the server */
+    /* Open connection to the server. */
     Socket server;
     try {
       server = new Socket(ip, Server.SOCKET_PORT);
@@ -36,6 +39,9 @@ public class Client
       ObjectOutputStream output = new ObjectOutputStream(server.getOutputStream());
       ObjectInputStream input = new ObjectInputStream(server.getInputStream());
 
+      /* Warning: in a real project, the code which handles the interaction with
+       * the user must be properly decoupled with the network code! This example
+       * is purposefully simplified. */
       System.out.println("Guess a 5-digit number!");
       boolean stop = false;
       while (!stop) {

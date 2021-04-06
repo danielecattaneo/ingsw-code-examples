@@ -7,11 +7,19 @@ import it.polimi.ingsw.example.server.ClientHandler;
 import java.io.IOException;
 
 
+/**
+ * A message sent from the client containing a guess for the secret
+ * number.
+ */
 public class GuessMsg extends CommandMsg
 {
   private int numberToGuess;
 
 
+  /**
+   * Create a new message with a guessed number.
+   * @param numberToGuess The guessed number
+   */
   public GuessMsg(int numberToGuess)
   {
     this.numberToGuess = numberToGuess;

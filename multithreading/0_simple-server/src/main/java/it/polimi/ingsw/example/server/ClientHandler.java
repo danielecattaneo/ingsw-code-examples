@@ -10,6 +10,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 
+/**
+ * A class that represents the client inside the server.
+ */
 public class ClientHandler implements Runnable
 {
   private Socket client;
@@ -18,6 +21,11 @@ public class ClientHandler implements Runnable
   private Mastermind game;
 
 
+  /**
+   * Initializes a new handler using a specific socket connected to
+   * a client.
+   * @param client The socket connection to the client.
+   */
   ClientHandler(Socket client)
   {
     this.client = client;
@@ -25,6 +33,9 @@ public class ClientHandler implements Runnable
   }
 
 
+  /**
+   * Connects to the client and runs the event loop.
+   */
   @Override
   public void run()
   {
@@ -50,6 +61,11 @@ public class ClientHandler implements Runnable
   }
 
 
+  /**
+   * An event loop that receives messages from the client and processes
+   * them in the order they are received.
+   * @throws IOException If a communication error occurs.
+   */
   private void handleClientConnection() throws IOException
   {
     try {
@@ -65,12 +81,21 @@ public class ClientHandler implements Runnable
   }
 
 
+  /**
+   * The game instance associated with this client.
+   * @return The game instance.
+   */
   public Mastermind getGame()
   {
     return game;
   }
 
 
+  /**
+   * Sends a message to the client.
+   * @param answerMsg The message to be sent.
+   * @throws IOException If a communication error occurs.
+   */
   public void sendAnswerMessage(AnswerMsg answerMsg) throws IOException
   {
     output.writeObject((Object)answerMsg);

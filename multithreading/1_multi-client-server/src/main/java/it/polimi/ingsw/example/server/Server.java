@@ -5,8 +5,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
+/**
+ * Server for the Mastermind game.
+ */
 public class Server
 {
+  /**
+   * The socket port where the server listens to client connections.
+   * @implNote In a real project, this must not be a constant!
+   */
   public final static int SOCKET_PORT = 7777;
 
 

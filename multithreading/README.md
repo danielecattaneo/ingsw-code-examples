@@ -21,15 +21,6 @@ indovinare, e tanti '-' quante cifre sono più alte.
   
   '1_multi-client-server' modificata per dimostrare architetture del client
   con thread multipli.
-  
-- **3_advanced-techs-1**
-
-  '2_client-with-bg-task' modificata per dimostrare l'utilizzo di
-  ScheduledExecutorService.
-  
-- **4_advanced-techs-2**
-
-  '3_advanced-techs-1' modificata per dimostrare l'utilizzo di Future<>.
 
 ## Note conclusive:
 

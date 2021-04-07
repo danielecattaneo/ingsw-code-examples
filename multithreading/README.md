@@ -3,7 +3,7 @@
 Questo archivio zip contiene codice di esempio da cui si può prendere spunto
 per capire le best-practices rispetto a come combinare multithreading e rete.
 
-Ci sono 5 esempi, di complessità crescente, che implementano il semplice gioco
+Ci sono 3 esempi, di complessità crescente, che implementano il semplice gioco
 "Mastermind". L'utente deve scoprire un numero di 5 cifre in base al feedback
 fornito dal computer. Se il numero non è corretto, il computer risponde con
 tanti '+' quante cifre nel numero indovinato sono più basse del numero da

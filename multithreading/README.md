@@ -21,6 +21,18 @@ indovinare, e tanti '-' quante cifre sono più alte.
   
   '1_multi-client-server' modificata per dimostrare architetture del client
   con thread multipli.
+  
+Due esempi aggiuntivi dimostrano l'utilizzo delle classi 
+`ScheduledExecutorServer` e `Future<>`. Questi esempi non implementano il gioco
+di esempio "Mastermind".
+  
+- **3_advanced-techs-1**
+
+  Applicazione che dimostra l'utilizzo di `ScheduledExecutorService`.
+  
+- **4_advanced-techs-2**
+
+  Applicazione che dimostra l'utilizzo di `Future<>`.
 
 ## Note conclusive:
 

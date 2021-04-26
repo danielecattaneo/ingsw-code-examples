@@ -15,8 +15,7 @@
 
     <dependencies>
 
-        <!-- JavaFX. Note: the multiple imports of javafx-graphics are used
-         for building multiplatform JARs -->
+        <!-- JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>

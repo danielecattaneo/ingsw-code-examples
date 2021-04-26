@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 
 public class JavaFXTest extends Application
 {
+  // When using IntelliJ, don't run the application from here, use the main
+  // method in JavaFXMain
   public static void main(String[] args)
   {
     launch(args);

@@ -3,7 +3,6 @@ package it.polimi.ingsw.example.client;
 import it.polimi.ingsw.example.client.views.IdleView;
 import it.polimi.ingsw.example.client.views.NextNumberView;
 import it.polimi.ingsw.example.client.views.View;
-import it.polimi.ingsw.example.server.Server;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -37,12 +36,14 @@ public class Client implements Runnable
 
     System.out.println("IP address of server?");
     String ip = scanner.nextLine();
+    System.out.println("Server port?");
+    int socketPort = Integer.parseInt(scanner.nextLine());
 
     /* Open connection to the server and start a thread for handling
      * communication. */
     Socket server;
     try {
-      server = new Socket(ip, Server.SOCKET_PORT);
+      server = new Socket(ip, socketPort);
     } catch (IOException e) {
       System.out.println("server unreachable");
       return;

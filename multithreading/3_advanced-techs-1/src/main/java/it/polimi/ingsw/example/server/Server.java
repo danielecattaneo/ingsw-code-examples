@@ -3,18 +3,20 @@ package it.polimi.ingsw.example.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Scanner;
 
 
 public class Server
 {
-  public final static int SOCKET_PORT = 7777;
-
-
   public static void main(String[] args)
   {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Server port?");
+    int socketPort = Integer.parseInt(scanner.nextLine());
+
     ServerSocket socket;
     try {
-      socket = new ServerSocket(SOCKET_PORT);
+      socket = new ServerSocket(socketPort);
     } catch (IOException e) {
       System.out.println("cannot open server socket");
       System.exit(1);

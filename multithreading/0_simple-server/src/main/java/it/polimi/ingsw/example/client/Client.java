@@ -1,6 +1,5 @@
 package it.polimi.ingsw.example.client;
 
-import it.polimi.ingsw.example.server.Server;
 import it.polimi.ingsw.example.server.messages.GuessAnswerMsg;
 import it.polimi.ingsw.example.server.messages.GuessMsg;
 import it.polimi.ingsw.example.server.messages.NewGameMsg;
@@ -23,11 +22,13 @@ public class Client
 
     System.out.println("IP address of server?");
     String ip = scanner.nextLine();
+    System.out.println("Server port?");
+    int socketPort = Integer.parseInt(scanner.nextLine());
 
     /* Open connection to the server. */
     Socket server;
     try {
-      server = new Socket(ip, Server.SOCKET_PORT);
+      server = new Socket(ip, socketPort);
     } catch (IOException e) {
       System.out.println("server unreachable");
       return;
@@ -39,7 +40,7 @@ public class Client
       ObjectInputStream input = new ObjectInputStream(server.getInputStream());
 
       /* Warning: in a real project, the code which handles the interaction with
-       * the user must be properly decoupled with the network code! This example
+       * the user must be properly decoupled from the network code! This example
        * is purposefully simplified. */
       System.out.println("Guess a 5-digit number!");
       boolean stop = false;

@@ -29,10 +29,12 @@ public class Client implements Runnable
 
     System.out.println("IP address of server?");
     String ip = scanner.nextLine();
+    System.out.println("Server port?");
+    int socketPort = Integer.parseInt(scanner.nextLine());
 
     Socket server;
     try {
-      server = new Socket(ip, Server.SOCKET_PORT);
+      server = new Socket(ip, socketPort);
     } catch (IOException e) {
       System.out.println("server unreachable");
       return;

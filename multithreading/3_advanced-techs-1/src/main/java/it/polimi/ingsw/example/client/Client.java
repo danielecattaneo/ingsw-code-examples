@@ -20,7 +20,7 @@ public class Client implements Runnable, ServerObserver
   ScheduledFuture nextTimePrintTask = null;
 
 
-  public static void main( String[] args )
+  public static void main(String[] args)
   {
     /* Instantiate a new Client which will also receive events from
      * the server by implementing the ServerObserver interface */
@@ -36,11 +36,13 @@ public class Client implements Runnable, ServerObserver
 
     System.out.println("IP address of server?");
     String ip = scanner.nextLine();
+    System.out.println("Server port?");
+    int socketPort = Integer.parseInt(scanner.nextLine());
 
     /* open a connection to the server */
     Socket server;
     try {
-      server = new Socket(ip, Server.SOCKET_PORT);
+      server = new Socket(ip, socketPort);
     } catch (IOException e) {
       System.out.println("server unreachable");
       return;

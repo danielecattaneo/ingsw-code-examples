@@ -77,25 +77,10 @@ public class ServerHandler
 
   private void connectionThread(String ip, int port)
   {
-    try {
-      server = new Socket(ip, port);
-    } catch (IOException e) {
-      notifyConnectionComplete(false);
+    boolean success = openConnection(ip, port);
+    notifyConnectionComplete(success);
+    if (!success)
       return;
-    }
-    try {
-      synchronized (this) {
-        output = new ObjectOutputStream(server.getOutputStream());
-        input = new ObjectInputStream(server.getInputStream());
-      }
-    } catch (IOException e) {
-      notifyConnectionComplete(false);
-      try {
-        server.close();
-      } catch (IOException e2) { }
-      return;
-    }
-    notifyConnectionComplete(true);
 
     try {
       while (true) {
@@ -109,18 +94,31 @@ public class ServerHandler
       System.out.println("protocol violation");
     }
 
+    closeConnection();
+  }
+
+
+  synchronized private boolean openConnection(String ip, int port)
+  {
     try {
-      synchronized (this) {
-        output = null;
-        input = null;
-        if (!server.isClosed())
-          server.close();
-      }
-    } catch (IOException e) { }
-    notifyConnectionClosed();
-    synchronized (this) {
-      thread = null;
+      server = new Socket(ip, port);
+    } catch (IOException e) {
+      return false;
     }
+
+    try {
+      output = new ObjectOutputStream(server.getOutputStream());
+      input = new ObjectInputStream(server.getInputStream());
+    } catch (IOException e) {
+      output = null;
+      input = null;
+      try {
+        server.close();
+      } catch (IOException e2) { }
+      return false;
+    }
+
+    return true;
   }
 
 
@@ -137,9 +135,14 @@ public class ServerHandler
 
   synchronized public void closeConnection()
   {
-    try {
-      server.close();
-    } catch (IOException e) { }
+    if (!server.isClosed()) {
+      try {
+        server.close();
+      } catch (IOException e) { }
+      notifyConnectionClosed();
+    }
+    output = null;
+    input = null;
     thread = null;
   }
 

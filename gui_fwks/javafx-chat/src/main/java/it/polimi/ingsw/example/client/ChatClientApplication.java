@@ -33,18 +33,21 @@ public class ChatClientApplication extends Application
     currentApplication = this;
     this.primaryStage = primaryStage;
     primaryStage.setOnCloseRequest((event) -> {
-      serverHandler.closeConnection();
-      System.out.println("closing!!");
+      if (serverHandler.isConnected())
+        serverHandler.closeConnection();
     });
     this.serverHandler = new ServerHandler();
     this.serverHandler.setConnectionClosedObserver(() -> {
       Platform.runLater(() -> {
-        Alert alert = new Alert(Alert.AlertType.ERROR, "The connection was closed.", ButtonType.OK);
-        alert.showAndWait();
-        switchToLoginScene();
+        if (primaryStage.isShowing()) {
+          Alert alert = new Alert(Alert.AlertType.INFORMATION, "The connection was closed.", ButtonType.OK);
+          alert.showAndWait();
+          switchToLoginScene();
+        }
       });
     });
     switchToLoginScene();
+    primaryStage.show();
   }
 
 
@@ -71,8 +74,8 @@ public class ChatClientApplication extends Application
     }
     Scene sc = new Scene(root);
     primaryStage.setScene(sc);
+    primaryStage.setTitle("Login");
     primaryStage.sizeToScene();
-    primaryStage.show();
   }
 
 
@@ -87,6 +90,7 @@ public class ChatClientApplication extends Application
     }
     Scene sc = new Scene(root);
     primaryStage.setScene(sc);
+    primaryStage.setTitle("Chat");
     primaryStage.sizeToScene();
   }
 }

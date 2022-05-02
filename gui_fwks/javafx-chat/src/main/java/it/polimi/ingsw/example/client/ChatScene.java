@@ -21,7 +21,7 @@ public class ChatScene
     ChatClientApplication app = ChatClientApplication.getCurrentApplication();
     ServerHandler sh = app.getServerHandler();
     sh.setMessageArrivedObserver((msg) -> {
-      Platform.runLater(() ->{
+      Platform.runLater(() -> {
         logTextArea.appendText("<" + msg.getSender() + "> " + msg.getMessage() + "\n");
       });
     });

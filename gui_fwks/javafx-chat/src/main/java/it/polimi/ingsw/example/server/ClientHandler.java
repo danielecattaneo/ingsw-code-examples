@@ -49,7 +49,6 @@ public class ClientHandler implements Runnable
       handleClientConnection();
     } catch (IOException e) {
       System.out.println("client " + client.getInetAddress() + " connection dropped");
-      e.printStackTrace();
     }
 
     try {
@@ -69,11 +68,9 @@ public class ClientHandler implements Runnable
     Object next;
 
     try {
-      System.out.println("Waiting for login");
       next = input.readObject();
       LoginMessage login = (LoginMessage)next;
       String username = login.getUsername();
-      System.out.println("Login received! Welcome to " + username);
       server.broadcastMessage(new IncomingMessage("system", "Welcome, " + username + "!"));
 
       while (true) {
